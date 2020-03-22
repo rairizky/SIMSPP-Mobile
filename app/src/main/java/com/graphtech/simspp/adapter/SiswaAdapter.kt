@@ -2,6 +2,7 @@ package com.graphtech.simspp.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.graphtech.simspp.R
 import com.graphtech.simspp.model.SiswaItem
 import kotlinx.android.synthetic.main.item_siswa.view.*
+import org.jetbrains.anko.toast
 import java.text.DecimalFormat
 
 class SiswaAdapter (private val context: Context, private val siswa: List<SiswaItem>)
@@ -37,6 +39,7 @@ class SiswaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val tagihanSiswa = view.tvTagihan
     private val itemSiswa = view.itemSiswa
 
+
     fun String.capitalizeWord() : String = split(" ").map { it.capitalize() }.joinToString(" ")
 
     fun bindItem(siswa: SiswaItem) {
@@ -57,7 +60,11 @@ class SiswaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             } else {
                 whatsappIntent.putExtra(Intent.EXTRA_TEXT, "Siswa/i atas nama ${siswa.nama!!.capitalizeWord()} memiliki tunggakan SPP sebesar RP. ${siswa.tagihan}.")
             }
-            itemView.context.startActivity(whatsappIntent)
+            try {
+                itemView.context.startActivity(Intent.createChooser(whatsappIntent, "Share Using"))
+            } catch (e: PackageManager.NameNotFoundException) {
+                itemView.context.toast("Error "+e.toString())
+            }
         }
     }
 }

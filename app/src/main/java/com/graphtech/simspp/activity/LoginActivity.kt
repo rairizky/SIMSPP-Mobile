@@ -85,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
             },
-            Response.ErrorListener { error -> Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show() }) {
+            Response.ErrorListener { error -> toast(error.message.toString()) }) {
             @Throws
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
